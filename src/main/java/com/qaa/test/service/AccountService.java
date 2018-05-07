@@ -17,21 +17,39 @@ import java.util.Optional;
 public class AccountService {
 
 
-   @Autowired
-   private AccountRepository repository;
+    @Autowired
+    private AccountRepository repository;
 
    @RequestMapping(method= RequestMethod.GET)
    public Iterable<Account> getAccounts() {
-        return null;
+        return repository.findAll();
    }
 
     @RequestMapping(method= RequestMethod.POST)
     public ResponseMessage addAccount(@RequestBody Account acc) {
-        return null;
+
+        Optional<Account> existingAccount = repository.findOptionalByFirstNameAndSecondNameAndAccountNumber(acc.getFirstName(), acc.getSecondName(), acc.getAccountNumber());
+        if (!existingAccount.isPresent()) {
+            repository.save(acc);
+            return new ResponseMessage("The account is successfully added.");
+        } else {
+            return new ResponseMessage(String.format("The account was not added. There is already an account for firstName=%s, secondName=%s, accountNumber=%s",
+                    existingAccount.get().getFirstName(),
+                    existingAccount.get().getSecondName(),
+                    existingAccount.get().getAccountNumber()));
+        }
+
     }
 
     @RequestMapping(method=RequestMethod.DELETE, path="/account-project/rest/account/json/{id}")
     public ResponseMessage deleteAccount(@PathVariable("id")  long id) {
-           return null;
+           Optional<Account> account = repository.findById(id);
+           account.ifPresent(repository::delete);
+           if (!account.isPresent()) {
+               return new ResponseMessage(String.format("Error in account deletion: No account with id=%d exists", id));
+           } else {
+               return new ResponseMessage(String.format("Account with id=%d has been successfully deleted", id));
+           }
+
     }
 }

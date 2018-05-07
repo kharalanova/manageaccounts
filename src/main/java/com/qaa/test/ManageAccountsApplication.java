@@ -19,6 +19,26 @@ import org.springframework.context.annotation.Bean;
         }
 
 
+        @Bean
+        public CommandLineRunner demo(AccountRepository repository) {
+            return (args) -> {
+                // save a couple of customers
+                repository.save(new Account("Jack", "Bauer", "1111"));
+                repository.save(new Account("Chloe", "O'Brian", "2222"));
+                repository.save(new Account("Kim", "Bauer", "3333"));
+                repository.save(new Account("David", "Palmer", "4444"));
+                repository.save(new Account("Michelle", "Dessler", "5555"));
+
+                // fetch all customers
+                log.info("Accounts found with findAll():");
+                log.info("-------------------------------");
+                for (Account account : repository.findAll()) {
+                    log.info(account.toString());
+                }
+                log.info("");
+
+            };
+        }
     }
 
 
