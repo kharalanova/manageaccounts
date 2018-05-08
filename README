@@ -1,7 +1,12 @@
 The project is implemented using Spring boot
-To build the project:
-mvn clean package
-To run it with jdk 9 use:
+
+To build the project from the project root folder run:
+ mvn clean package
+
+To run the project:
+- move to folder target
+ cd target
+- To run it with jdk 9 use:
  java -jar --add-modules java.xml.bind manageaccounts-1.0-SNAPSHOT.jar
-To run it with jdk 8 use:
+- To run it with jdk 8 use:
  java -jar manageaccounts-1.0-SNAPSHOT.jar
